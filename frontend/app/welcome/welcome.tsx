@@ -5,7 +5,7 @@ export function Welcome() {
     <main className="flex items-center justify-around pt-16 pb-4">
       <p>Hi </p>
       <Button variant={"outline"} className="cursor-pointer">
-        HI there
+        HI there i am haitham
       </Button>
     </main>
   );
