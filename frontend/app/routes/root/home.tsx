@@ -11,9 +11,9 @@ export function meta({}: Route.MetaArgs) {
 
 const HomePage = () => {
   return (
-    <div className="size-full flex items-center justify-center">
+    <div className="w-full h-screen gap-4 flex items-center justify-center">
       <Link to={"/sign-in"}>
-        <Button className="cursor-pointer" size={"lg"} variant={"outline"}>
+        <Button className="cursor-pointer" size={"lg"}>
           Login
         </Button>
       </Link>
