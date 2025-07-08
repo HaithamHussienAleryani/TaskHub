@@ -4,7 +4,6 @@ import { Button } from "~/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,7 +11,6 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { signInSchema } from "~/lib/schema";
 import {
   Form,
@@ -22,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Link } from "react-router";
 
 type SignInData = z.infer<typeof signInSchema>;
 
@@ -47,7 +46,10 @@ const SignIn = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-7"
+            >
               <FormField
                 control={form.control}
                 name="email"
@@ -70,7 +72,15 @@ const SignIn = () => {
                 name="password"
                 render={(field) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <Link
+                        className="text-sm text-blue-600 hover:underline"
+                        to={"/forgot-password"}
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
                     <FormControl>
                       <Input
                         type="password"
@@ -83,8 +93,21 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
+              <Button type="submit" className="w-full">
+                Sign in{" "}
+              </Button>
             </form>
           </Form>
+          <CardFooter className="flex items-center justify-center mt-6">
+            <div className="flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link className="text-blue-600" to={"/sign-up"}>
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </CardFooter>
         </CardContent>
       </Card>
     </section>
