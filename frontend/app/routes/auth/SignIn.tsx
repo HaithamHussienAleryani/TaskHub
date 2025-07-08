@@ -4,7 +4,6 @@ import { Button } from "~/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,7 +11,6 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { signInSchema } from "~/lib/schema";
 import {
   Form,
@@ -22,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Link } from "react-router";
 
 type SignInData = z.infer<typeof signInSchema>;
 
@@ -41,13 +40,18 @@ const SignIn = () => {
   return (
     <section className="min-h-screen flex flex-col bg-muted/40 p-4 items-center justify-center">
       <Card className="max-w-md w-full shadow-xl">
-        <CardHeader>
-          <CardTitle>Welcome back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+        <CardHeader className="text-center mb-5">
+          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Sign in to your account to continue
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-7"
+            >
               <FormField
                 control={form.control}
                 name="email"
@@ -70,7 +74,15 @@ const SignIn = () => {
                 name="password"
                 render={(field) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <Link
+                        className="text-sm text-blue-600 hover:underline"
+                        to={"/forgot-password"}
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
                     <FormControl>
                       <Input
                         type="password"
@@ -83,8 +95,21 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
+              <Button type="submit" className="w-full">
+                Sign in{" "}
+              </Button>
             </form>
           </Form>
+          <CardFooter className="flex items-center justify-center mt-6">
+            <div className="flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link className="text-blue-600" to={"/sign-up"}>
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </CardFooter>
         </CardContent>
       </Card>
     </section>
