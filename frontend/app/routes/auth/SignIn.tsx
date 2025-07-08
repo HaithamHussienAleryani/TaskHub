@@ -40,9 +40,11 @@ const SignIn = () => {
   return (
     <section className="min-h-screen flex flex-col bg-muted/40 p-4 items-center justify-center">
       <Card className="max-w-md w-full shadow-xl">
-        <CardHeader>
-          <CardTitle>Welcome back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+        <CardHeader className="text-center mb-5">
+          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Sign in to your account to continue
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>

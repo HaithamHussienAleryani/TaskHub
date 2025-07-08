@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { signInSchema, signUpSchema } from "~/lib/schema";
+import { signUpSchema } from "~/lib/schema";
 import {
   Form,
   FormControl,
@@ -42,9 +42,13 @@ const SignUp = () => {
   return (
     <section className="min-h-screen flex flex-col bg-muted/40 p-4 items-center justify-center">
       <Card className="max-w-md w-full shadow-xl">
-        <CardHeader>
-          <CardTitle>Create new account</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+        <CardHeader className="text-center mb-5">
+          <CardTitle className="text-2xl font-bold">
+            Create an account
+          </CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Create new account to continue
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
