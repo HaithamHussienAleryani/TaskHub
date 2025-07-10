@@ -29,7 +29,6 @@ const postData = async<T>(path: string, data: unknown): Promise<T> => {
 
     const response = await api.post<T>(path, data);
     return response.data;
-
 }
 
 const fetchData = async<T>(path: string): Promise<T> => {
