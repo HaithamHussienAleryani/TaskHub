@@ -3,6 +3,7 @@ import express from "express"
 import dotenv from "dotenv"
 import mongoose from "mongoose"
 import morgan  from "morgan"
+import routes from './routes/index.js'
 
 dotenv.config();
 
@@ -30,6 +31,8 @@ app.get("/",async (request,response)=>{
     })
 })
 
+
+app.use('/api-v1',routes)
 
 // error not found
 app.use((request,response,next)=>{
