@@ -22,7 +22,7 @@ import {
 } from "~/components/ui/form";
 import { Link } from "react-router";
 
-type SignUpData = z.infer<typeof signUpSchema>;
+export type SignUpData = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
   const form = useForm<SignUpData>({
