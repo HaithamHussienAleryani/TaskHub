@@ -16,6 +16,7 @@ app.use(cors({
     methods:["GET","POST","PUT","DELETE"],
     allowedHeaders:["Content-Type","Authorization"]
 }))
+
 app.use(morgan("dev"))
 // add db connection
 mongoose.connect(process.env.MONGODB_URI).then(()=>{
@@ -23,6 +24,7 @@ mongoose.connect(process.env.MONGODB_URI).then(()=>{
 }).catch((err)=>{
     console.log("Mongo DB is not connected ", err)
 })
+
 app.use(express.json())
 
 app.get("/",async (request,response)=>{
