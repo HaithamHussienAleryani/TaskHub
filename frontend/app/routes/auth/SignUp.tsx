@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "~/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Card,
   CardContent,
@@ -21,6 +22,9 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Link } from "react-router";
+import { useSignUpMutation } from "~/hooks/use-auth";
+import { toast } from "sonner";
+import Loader from "~/components/ui/Loader";
 
 export type SignUpData = z.infer<typeof signUpSchema>;
 
@@ -35,8 +39,20 @@ const SignUp = () => {
     },
   });
 
+  const { mutate, isPending } = useSignUpMutation();
+
   const handleSubmit = (values: SignUpData) => {
-    console.log(values);
+    mutate(values, {
+      onSuccess: () => {
+        toast.success("Account created successfully");
+      },
+      onError: (error: any) => {
+        console.log(error);
+        const errorMessage =
+          error.response?.data?.message || "An error occured";
+        toast.error(errorMessage);
+      },
+    });
   };
 
   return (
@@ -59,7 +75,7 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="name"
-                render={(field) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
@@ -76,7 +92,7 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="email"
-                render={(field) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email Address</FormLabel>
                     <FormControl>
@@ -93,13 +109,12 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="password"
-                render={(field) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        defaultValue={""}
                         placeholder="Enter your password"
                         {...field}
                       />
@@ -112,13 +127,12 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="confirmPassword"
-                render={(field) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        defaultValue={""}
                         placeholder="Enter your password confirmation"
                         {...field}
                       />
@@ -128,7 +142,7 @@ const SignUp = () => {
                 )}
               />
               <Button type="submit" className="w-full">
-                Sign in{" "}
+                {isPending ? <Loader /> : "Sign up"}
               </Button>
             </form>
           </Form>
