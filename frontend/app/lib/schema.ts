@@ -15,20 +15,17 @@ export const signInSchema = z.object({
 export const signUpSchema = z.object({
   name: z
     .string()
-    .nonempty("Name is required").min(3, "Name must be at least 3 characters long")
-    .max(100, "Name must be at most 100 characters long"),
+    .min(3, "Name must be at least 3 characters long"),
   email: z
     .string()
-    .email("Invalid email address")
-    .nonempty("Email is required"),
+    .email("Invalid email address"),
   password: z
-    .string().nonempty("Password is required")
+    .string()
     .min(8, "Password must be at least 8 characters long")
     .max(100, "Password must be at most 100 characters long")
   ,
   confirmPassword: z
     .string()
-    .nonempty("Confirm password is required")
     .min(8, "Password must be at least 8 characters long")
     .max(100, "Password must be at most 100 characters long")
 }).refine((data) => data.password === data.confirmPassword, {
