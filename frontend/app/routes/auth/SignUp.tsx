@@ -43,8 +43,8 @@ const SignUp = () => {
 
   const handleSubmit = (values: SignUpData) => {
     mutate(values, {
-      onSuccess: () => {
-        toast.success("Account created successfully");
+      onSuccess: (data: any) => {
+        toast.success(data.message);
       },
       onError: (error: any) => {
         console.log(error);
