@@ -13,4 +13,10 @@ const loginSchema = z.object({
     password:z.string().min(8,"Password must be at least 8 characters long"),
 })
 
-export  {registerSchema,loginSchema}
+
+const verificationSchema = z.object({
+    token:z.string().min(1,'Token is required')
+}) 
+
+
+export  {registerSchema,loginSchema, verificationSchema}

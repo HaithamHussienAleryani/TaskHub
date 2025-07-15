@@ -34,7 +34,7 @@ const registerUser = async (request,response)=>{
         })
 
 
-        const verificationToken = jwt.sign({userId:newUser._id,property:"email-verification"},process.env.JWT_SECRET,{expiresIn:"1h"})
+        const verificationToken = jwt.sign({userId:newUser._id,purpose:"email-verification"},process.env.JWT_SECRET,{expiresIn:"1h"})
 
         await Verification.create({
             userId:newUser._id,
@@ -63,6 +63,58 @@ const loginUser = async (request,response)=>{
     }
 }
 
+const verifyUser = async(request,response)=>{
+    try {
+
+        const token = request.body
+        const payload = jwt.verify(token,process.env.JWT_SECRET)
+       
+        if(!payload)
+        {
+            return response.status(401).json({message:"Unauthorized"})
+        }
+
+        const {userId,purpose} = payload;
+        if(purpose !== "email-verification" )
+        {
+                return response.status(401).json({message:"Unauthorized"})
+
+        }
+        const verification = await Verification.findOne({userId,token})
+
+        if(!verification)
+        {
+                return response.status(401).json({message:"Unauthorized"})
+        }
+         const isTokenExpired = verification.expiresAt < Date.now()
+
+         if(isTokenExpired)
+         {
+            return response.status(401).json({message:"Token has expired"})
+         }
+
+         const user = User.findById(userId)
+
+         if(!user)
+         {
+                return response.status(401).json({message:"Unauthorized"})
+         }
+
+         if(user.isVerified)
+         {
+            return response.status(400).json({message:"Email already verified"})
+         }
+         user.isVerified = true
+         await user.save()
+         await Verification.findByIdAndDelete(verification._id)
+
+         response.status(200).json({message:"Email verified successfully"})
+        
+    } catch (error) {
+        console.log(error)
+        response.Status(500).json({message:"Internal server error"})
+    }
+}
 
 
 const sendVerificationEmail = async(verificationToken,email)=>{
@@ -76,4 +128,4 @@ const sendVerificationEmail = async(verificationToken,email)=>{
 
 
 
-export {registerUser,loginUser}
+export {registerUser,loginUser , verifyUser}
