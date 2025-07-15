@@ -118,7 +118,7 @@ const verifyUser = async(request,response)=>{
 
 
 const sendVerificationEmail = async(verificationToken,email)=>{
- const verificationLink = `${process.env.BASE_URL}/verify-email?token=${verificationToken}`
+ const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`
         
         const emailBody = `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`
         const emailSubject = "Verify Your Email"
