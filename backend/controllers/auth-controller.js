@@ -3,12 +3,24 @@ import bcrypt  from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Verification from "../models/verificationSchema.js"
 import { sendEmail } from "../libs/send-email.js"
+import aj from "../libs/arcjet.js"
  
  
 
 const registerUser = async (request,response)=>{
     try {
         const {email,name,password} = request.body
+
+        const decision = await aj.protect(request,{email})
+        console.log(decision)
+
+        if(decision.isDenied())
+        {
+            response.writeHead(403,{'Content-type':'application/json'})
+            response.end(JSON.stringify({message:"Invlid Email Address"}))
+            return;
+        }
+
         const existingUser = await User.findOne({email})
         if(existingUser){
             return response.status(400).json({message:"User already exists"})
@@ -37,9 +49,9 @@ const registerUser = async (request,response)=>{
     
         response.status(201).json({message:"Verification email sent to your email. Please check and verify your account"})
 
-    } catch (error) {
+    }  catch(error) {
         console.log(error)
-        response.Status(500).json({message:"Internal server error"})
+        response.status(500).json({message:"Internal server error"})
     }
 }
 const loginUser = async (request,response)=>{
