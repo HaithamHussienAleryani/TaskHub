@@ -66,7 +66,7 @@ const loginUser = async (request,response)=>{
 const verifyUser = async(request,response)=>{
     try {
 
-        const token = request.body
+        const token = request.body.token
         const payload = jwt.verify(token,process.env.JWT_SECRET)
        
         if(!payload)
@@ -93,7 +93,7 @@ const verifyUser = async(request,response)=>{
             return response.status(401).json({message:"Token has expired"})
          }
 
-         const user = User.findById(userId)
+         const user = await User.findById(userId)
 
          if(!user)
          {
@@ -112,7 +112,7 @@ const verifyUser = async(request,response)=>{
         
     } catch (error) {
         console.log(error)
-        response.Status(500).json({message:"Internal server error"})
+        response.status(500).json({message:"Internal server error"})
     }
 }
 
