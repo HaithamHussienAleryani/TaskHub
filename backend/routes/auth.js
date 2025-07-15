@@ -3,8 +3,8 @@ import zod from 'zod'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { validateRequest } from 'zod-express-middleware'
-import { loginSchema, registerSchema } from '../libs/validate-schema.js'
-import { registerUser,loginUser } from '../controllers/auth-controller.js'
+import { loginSchema, registerSchema,verificationSchema } from '../libs/validate-schema.js'
+import { registerUser,loginUser, verifyUser } from '../controllers/auth-controller.js'
 
 
 const router = express.Router();
@@ -20,6 +20,14 @@ router.post('/register',
         body:loginSchema,
     }),
    loginUser,)
+
+
+   router.post('/verify-email',
+    validateRequest({
+        body:verificationSchema
+    }),
+    verifyUser,
+   )
 
    
 

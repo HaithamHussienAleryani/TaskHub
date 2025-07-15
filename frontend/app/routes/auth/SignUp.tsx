@@ -21,7 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useSignUpMutation } from "~/hooks/use-auth";
 import { toast } from "sonner";
 import Loader from "~/components/ui/Loader";
@@ -40,11 +40,16 @@ const SignUp = () => {
   });
 
   const { mutate, isPending } = useSignUpMutation();
+  const navigate = useNavigate();
 
   const handleSubmit = (values: SignUpData) => {
     mutate(values, {
       onSuccess: (data: any) => {
-        toast.success(data.message);
+        toast.success(data.message, {
+          description: "An email has been sent to your inbox check it",
+        });
+        navigate("/sign-in");
+        form.reset();
       },
       onError: (error: any) => {
         console.log(error);
