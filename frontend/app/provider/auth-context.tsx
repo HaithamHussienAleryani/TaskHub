@@ -1,5 +1,14 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import type { User } from "~/types/user";
+import { queryClient } from "./react-query-provider";
+import { useLocation, useNavigate } from "react-router";
+import { publicRoutes } from "~/lib";
 
 interface AuthContextType {
   user: User | null;
@@ -17,10 +26,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = async (email: string, password: string) => {
-    console.log(email, password);
+  const navigate = useNavigate();
+
+  const currentPath = useLocation().pathname;
+
+  const isPublicRoute = publicRoutes.includes(currentPath);
+
+  // check if user is authenticated
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsLoading(true);
+      const token = localStorage.getItem("token");
+      if (token) {
+        const user = localStorage.getItem("user");
+        if (user) {
+          setUser(JSON.parse(user));
+          setIsAuthenticated(true);
+        }
+      }
+      setIsLoading(false);
+    };
+  }, []);
+
+  const login = async (data: any) => {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    setUser(data.user);
+    setIsAuthenticated(true);
   };
-  const logout = async () => {};
+  const logout = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsAuthenticated(false);
+
+    queryClient.clear();
+  };
 
   const values = { user, isAuthenticated, isLoading, login, logout };
 
