@@ -20,7 +20,10 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useSignInMutation } from "~/hooks/use-auth";
+import { toast } from "sonner";
+import Loader from "~/components/ui/Loader";
 
 type SignInData = z.infer<typeof signInSchema>;
 
@@ -33,8 +36,23 @@ const SignIn = () => {
     },
   });
 
+  const { mutate, isPending } = useSignInMutation();
+  const navigator = useNavigate();
+
   const handleSubmit = (values: SignInData) => {
-    console.log(values);
+    try {
+      mutate(values, {
+        onSuccess: (data: any) => {
+          toast.success(data.message);
+          setTimeout(() => navigator("/dashboard"), 1000);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -55,7 +73,7 @@ const SignIn = () => {
               <FormField
                 control={form.control}
                 name="email"
-                render={(field) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email Address</FormLabel>
                     <FormControl>
@@ -72,7 +90,7 @@ const SignIn = () => {
               <FormField
                 control={form.control}
                 name="password"
-                render={(field) => (
+                render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
                       <FormLabel>Password</FormLabel>
@@ -96,7 +114,7 @@ const SignIn = () => {
                 )}
               />
               <Button type="submit" className="w-full">
-                Sign in{" "}
+                {isPending ? <Loader /> : "Sign in"}
               </Button>
             </form>
           </Form>
