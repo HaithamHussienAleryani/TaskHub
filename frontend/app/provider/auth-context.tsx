@@ -37,16 +37,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const checkAuth = () => {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
-      if (token) {
-        const user = localStorage.getItem("user");
-        if (user) {
-          setUser(JSON.parse(user));
-          setIsAuthenticated(true);
-        }
+      const userInfo = localStorage.getItem("user");
+      if (userInfo) {
+        setUser(JSON.parse(userInfo));
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        if (!isPublicRoute) navigate("/sign-in");
       }
       setIsLoading(false);
     };
+
+    checkAuth();
   }, []);
 
   const login = async (data: any) => {
