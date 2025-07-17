@@ -24,6 +24,7 @@ import { Link, useNavigate } from "react-router";
 import { useSignInMutation } from "~/hooks/use-auth";
 import { toast } from "sonner";
 import Loader from "~/components/ui/Loader";
+import { useAuth } from "~/provider/auth-context";
 
 type SignInData = z.infer<typeof signInSchema>;
 
@@ -39,10 +40,13 @@ const SignIn = () => {
   const { mutate, isPending } = useSignInMutation();
   const navigator = useNavigate();
 
+  const { login } = useAuth();
+
   const handleSubmit = (values: SignInData) => {
     try {
       mutate(values, {
         onSuccess: (data: any) => {
+          login(data);
           toast.success(data.message);
           setTimeout(() => navigator("/dashboard"), 1000);
         },
