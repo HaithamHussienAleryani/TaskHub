@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       logout();
       navigate("/sign-in");
     };
-
     window.addEventListener("force-logout", handleLogout);
     return () => window.removeEventListener("force-logout", handleLogout);
   }, []);
@@ -67,12 +66,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(data.user);
     setIsAuthenticated(true);
   };
+
   const logout = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
     setIsAuthenticated(false);
-
+    navigate("/sign-in");
     queryClient.clear();
   };
 
