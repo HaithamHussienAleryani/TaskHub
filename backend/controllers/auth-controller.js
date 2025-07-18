@@ -178,6 +178,35 @@ const verifyUser = async (request, response) => {
   }
 };
 
+const resetPasswordRequest = async (request, response)=>{
+  try {
+    const {email} = request.body
+
+    const user = await User.findOne({email})
+
+    if(!user){
+      return response.status(400).json({message:"User not found"})
+    }
+
+    if(!user.isVerified)
+    {
+      return response.status(400).json({message:"Please verify your email then try again"})
+    }
+
+    const verification = await Verification.findOne({userId:user._id})
+
+    if(verification && verification.expiresAt > Date.now){
+      await Verification.findByIdAndDelete(verification._id)
+    }
+    
+
+  } catch (error) {
+    return response.status(500).json({message:"Internal server error"})
+    
+  }
+
+}
+
 const sendVerificationEmail = async (verificationToken, email) => {
   const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
@@ -187,4 +216,6 @@ const sendVerificationEmail = async (verificationToken, email) => {
   return await sendEmail(email, emailSubject, emailBody);
 };
 
-export { registerUser, loginUser, verifyUser };
+
+
+export { registerUser, loginUser, verifyUser,resetPasswordRequest };
