@@ -54,6 +54,6 @@ const deleteData = async<T>(path: string): Promise<T> => {
 }
 
 
-export { postData, fetchData, updateData, deleteData };
+export { deleteData, fetchData, postData, updateData };
 
 
