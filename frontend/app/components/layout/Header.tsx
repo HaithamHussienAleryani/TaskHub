@@ -11,7 +11,6 @@ const Header = ({
   selectedWorkspace,
   onCreateWorkspace,
 }: HeaderProps) => {
-  // Construct the header UI with workspace selection and creation
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-white shadow">
       <div className="flex items-center gap-4">
@@ -20,8 +19,6 @@ const Header = ({
           className="border rounded px-2 py-1"
           value={selectedWorkspace?._id || ""}
           onChange={(e) => {
-            // For demonstration, construct a dummy workspace object
-            // In real usage, you would map over available workspaces
             const workspace: Workspace = {
               _id: e.target.value,
               name: e.target.options[e.target.selectedIndex].text,
